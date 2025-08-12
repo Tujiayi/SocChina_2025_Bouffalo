@@ -1,0 +1,45 @@
+cmake_minimum_required(VERSION 3.15)
+
+include(proj.conf)
+
+find_package(bouffalo_sdk REQUIRED HINTS $ENV{BL_SDK_BASE})
+
+sdk_add_include_directories(.)
+sdk_add_include_directories(sev_btble)
+target_sources(app PRIVATE sev_btble/ble_tp_svc.c)
+sdk_add_include_directories(utils)
+target_sources(app PRIVATE utils/utils_sha256.c)
+sdk_add_include_directories(./https)
+sdk_add_include_directories(./https/include)
+target_sources(app PRIVATE
+                   https/src/https.c
+                   https/src/bl_https.c
+                   )
+
+sdk_add_include_directories(es8388)
+sdk_add_include_directories(lcd)
+sdk_add_include_directories(touch)
+sdk_add_include_directories(SI7021)
+sdk_add_include_directories(GY906)
+sdk_add_include_directories(MAX30102)
+sdk_add_include_directories(${PROJECT_SOURCE_DIR}/spi)
+target_sources(app PRIVATE es8388/bsp_es8388.c)
+target_sources(app PRIVATE lcd/lcd.c)
+target_sources(app PRIVATE lcd/font.c)
+target_sources(app PRIVATE lcd/spi/st7789v_spi.c)
+target_sources(app PRIVATE lcd/spi/bl_spi_hard_4.c)
+target_sources(app PRIVATE touch/touch.c)
+target_sources(app PRIVATE touch/ft6x36_i2c.c)
+target_sources(app PRIVATE touch/gt911_i2c.c)
+target_sources(app PRIVATE SI7021/si7021.c)
+target_sources(app PRIVATE GY906/gy906.c)
+target_sources(app PRIVATE MAX30102/max30102.c)
+sdk_add_include_directories(./tinymaix)
+target_sources(app PRIVATE ./tinymaix/tm_layers.c)
+target_sources(app PRIVATE ./tinymaix/tm_model.c)
+target_sources(app PRIVATE ./tinymaix/tm_stat.c)
+sdk_add_include_directories(./mqtt)
+target_sources(app PRIVATE ./mqtt/wifi_mqtt.c)
+
+sdk_set_main_file(main.c)
+project(peripheral)
